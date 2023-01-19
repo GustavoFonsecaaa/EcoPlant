@@ -1,19 +1,17 @@
 
-
-import 'package:eco/camera.dart';
-
-
+import 'package:eco/recover2.dart';
+import 'package:eco/login.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+
+class Recover extends StatefulWidget {
+  const Recover({Key? key}) : super(key: key);
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<Recover> createState() => _RecoverState();
 }
 
-class _SignupState extends State<Signup> {
+class _RecoverState extends State<Recover> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
@@ -40,9 +38,9 @@ class _SignupState extends State<Signup> {
             padding: const EdgeInsets.all(8),
           ),
           const Text(
-            'Sign Up',
+            'Recover Password',
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold),
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
           ),
             SizedBox(
               height: 20,
@@ -81,7 +79,7 @@ class _SignupState extends State<Signup> {
                    borderRadius: BorderRadius.circular(20),
                     ),
                     prefixIcon: Icon(Icons.lock,color: Colors.black,),
-                      label: Text('password'), hintText: 'Digite a sua senha',
+                      label: Text('New Password'), hintText: 'Nova Palavra-Passe',
                       hintStyle: TextStyle(color: Colors.grey,),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
@@ -109,26 +107,40 @@ class _SignupState extends State<Signup> {
                   SizedBox(
               height: 20,
             ),
-                Container(
-                
-child: TextField(
-keyboardType: TextInputType.number,
-inputFormatters: <TextInputFormatter>[
-  FilteringTextInputFormatter.digitsOnly
-],
- decoration: InputDecoration(
-  floatingLabelBehavior: FloatingLabelBehavior.always,
+TextFormField(
+                  controller: _senhaController,
+                  autofocus: true,
+                  obscureText: _showPassword == false ? true : false,
+                  decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
                     border: OutlineInputBorder(
                    borderRadius: BorderRadius.circular(20),
                     ),
-                   prefixIcon: Icon(Icons.phone, color: Colors.black,),
-                    label: Text('Phone Number'), hintText: 'Digite o seu número!',
+                    prefixIcon: Icon(Icons.lock,color: Colors.black,),
+                      label: Text('Repeat New Password'), hintText: 'Confirmar Palavra-Passe',
                       hintStyle: TextStyle(color: Colors.grey,),
-                      
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
 
-),
-),
+                      ),
+                      suffixIcon: GestureDetector(
+                        child: Icon(_showPassword == false ? Icons.visibility_off : Icons.visibility, color: Colors.grey,),
+                        onTap: () {
+                          setState(() {
+                            _showPassword = !_showPassword;
+                          });
+                        },
+                      ),
+                      ),
+                        validator: (senha){
+                        if(senha == null || senha.isEmpty){
+                          return 'Digite a sua senha!';
+                        }else if(senha.length < 6){
+                        return 'Digite uma senha mais forte!';
 
+                        }
+                        return null;
+                      },
                 ),
                   SizedBox(
               height: 20,
@@ -141,14 +153,14 @@ inputFormatters: <TextInputFormatter>[
                     if(_formKey.currentState!.validate()){
 Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>  MyHomePagee()),
+              MaterialPageRoute(builder: (context) =>  Recover2()),
               
             );
                     }
                   },
                   child: Text(
                     
-                    'Sign Up',
+                    'Send Confirmation Link',
                     
                   ),
                   style: ElevatedButton.styleFrom(
@@ -159,12 +171,40 @@ Navigator.push(
   ),
   minimumSize: Size(280, 50),
 ),
+
                 ),
+                          SizedBox(
+              height: 50
+            ),   Row(
+mainAxisAlignment: MainAxisAlignment.center,
+children: [
+ InkWell(
+  onTap: (){
+    Navigator.push(context, MaterialPageRoute(builder: (_)=>const Login()));
+  },
+  child: const Text("Back To Login",
+  style: TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: Colors.green,
+  ),
+  ),
+ ),
+],
+
+
+
+            )
               ],
             ),
+            
+            
           ),
+          
         ),
       ),
+      
     );
+    
   }
 }
